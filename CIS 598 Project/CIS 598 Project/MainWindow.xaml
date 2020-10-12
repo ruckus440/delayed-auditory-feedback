@@ -21,7 +21,7 @@
             <ContentControl.ContentTemplate>
                 <DataTemplate>
                     <Grid>
-                        <ComboBox x:Name="uxPresetComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged" Text="Testing" Grid.Row="0" Grid.Column="0" Height="22">
+                        <ComboBox x:Name="uxPresetComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="uxPresetComboBox_SelectionChanged" Text="Testing" Grid.Row="0" Grid.Column="0" Height="22">
                             <ComboBoxItem>Zoom - 598</ComboBoxItem>
                             <ComboBoxItem>Teams - Work</ComboBoxItem>
                             <ComboBoxItem>Overwatch</ComboBoxItem>

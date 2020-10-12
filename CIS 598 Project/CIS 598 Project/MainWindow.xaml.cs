@@ -27,7 +27,7 @@ namespace CIS_598_Project
             
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void uxPresetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             
         }
