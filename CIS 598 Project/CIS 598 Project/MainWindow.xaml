@@ -21,7 +21,7 @@
             <ContentControl.ContentTemplate>
                 <DataTemplate>
                     <Grid>
-                        <ComboBox x:Name="presets" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged" Text="Testing" Grid.Row="0" Grid.Column="0" Height="22">
+                        <ComboBox x:Name="uxPresetComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged" Text="Testing" Grid.Row="0" Grid.Column="0" Height="22">
                             <ComboBoxItem>Zoom - 598</ComboBoxItem>
                             <ComboBoxItem>Teams - Work</ComboBoxItem>
                             <ComboBoxItem>Overwatch</ComboBoxItem>
@@ -32,20 +32,20 @@
                     </Grid>
 
                     <DataTemplate.Triggers>
-                        <Trigger SourceName="presets" Property="SelectedItem" Value="{x:Null}">
+                        <Trigger SourceName="uxPresetComboBox" Property="SelectedItem" Value="{x:Null}">
                             <Setter TargetName="tb" Property="Visibility" Value="Visible"/>
                         </Trigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </ContentControl.ContentTemplate>
         </ContentControl>
-        <ToggleButton x:Name="toggle" Content="Off" Grid.Column="1" Margin="68,20,92,10" Checked="toggle_Checked" Unchecked="toggle_Unchecked"></ToggleButton>
+        <ToggleButton x:Name="uxPowerToggle" Content="Off" Grid.Column="1" Margin="68,20,92,10" Checked="uxPowerToggle_Checked" Unchecked="uxPowerToggle_Unchecked"></ToggleButton>
         <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Width="60">Frequency</TextBlock>
-        <Slider Grid.Row="1" Grid.Column="1" Value="5"></Slider>
+        <Slider x:Name="uxFrequencySlider" Grid.Row="1" Grid.Column="1" Value="5" ValueChanged="uxFrequencySlider_ValueChanged"></Slider>
         <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Width="60">Delay</TextBlock>
-        <Slider Grid.Row="2" Grid.Column="1"></Slider>
+        <Slider x:Name="uxDelaySlider" Grid.Row="2" Grid.Column="1" ValueChanged="uxDelaySlider_ValueChanged"></Slider>
         <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Width="60">Volume</TextBlock>
-        <Slider Grid.Row="3" Grid.Column="1" Value="5"></Slider>
+        <Slider x:Name="uxVolumeSlider" Grid.Row="3" Grid.Column="1" Value="5" ValueChanged="uxVolumeSlider_ValueChanged"></Slider>
     </Grid>
 
 </Window>
