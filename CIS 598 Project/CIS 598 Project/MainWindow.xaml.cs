@@ -32,15 +32,30 @@ namespace CIS_598_Project
             
         }
 
-        private void toggle_Checked(object sender, RoutedEventArgs e)
+        private void uxPowerToggle_Checked(object sender, RoutedEventArgs e)
         {
-            toggle.Content = "On";
+            uxPowerToggle.Content = "On";
 
         }
 
-        private void toggle_Unchecked(object sender, RoutedEventArgs e)
+        private void uxPowerToggle_Unchecked(object sender, RoutedEventArgs e)
         {
-            toggle.Content = "Off";
+            uxPowerToggle.Content = "Off";
+        }
+
+        private void uxFrequencySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+        }
+
+        private void uxDelaySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
+        }
+
+        private void uxVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+
         }
     }
 }
