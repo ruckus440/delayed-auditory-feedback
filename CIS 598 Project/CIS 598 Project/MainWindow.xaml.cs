@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,11 +22,22 @@ namespace CIS_598_Project
     /// </summary>
     public partial class MainWindow : Window
     {
+        private WaveIn recorder;
+        private BufferedWaveProvider bufferedWaveProvider;
+        private SavingWaveProvider savingWaveProvider;
+        private WaveOut player;
+
         public string PlaceholderText { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
             
+        }
+
+        private void RecorderOnDataAvailable(object sender, WaveInEventArgs waveInEventArgs)
+        {
+            bufferedWaveProvider.AddSamples(waveInEventArgs.Buffer, 0, waveInEventArgs.BytesRecorded);
         }
 
         private void uxPresetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -36,11 +49,33 @@ namespace CIS_598_Project
         {
             uxPowerToggle.Content = "On";
 
+            // set up the recorder
+            recorder = new WaveIn();
+            recorder.DataAvailable += RecorderOnDataAvailable;
+
+            // set up our signal chain
+            bufferedWaveProvider = new BufferedWaveProvider(recorder.WaveFormat);
+            savingWaveProvider = new SavingWaveProvider(bufferedWaveProvider, "temp.wav");
+
+            // set up playback
+            player = new WaveOut();
+            player.Init(savingWaveProvider);
+
+            // begin playback & record
+            player.Play();
+            recorder.StartRecording();
         }
 
         private void uxPowerToggle_Unchecked(object sender, RoutedEventArgs e)
         {
             uxPowerToggle.Content = "Off";
+
+            // stop recording
+            recorder.StopRecording();
+            // stop playback
+            player.Stop();
+            // finalize the WAV file
+            savingWaveProvider.Dispose();
         }
 
         private void uxFrequencySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
