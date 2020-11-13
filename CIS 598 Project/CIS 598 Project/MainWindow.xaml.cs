@@ -1,4 +1,5 @@
 ﻿using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -24,8 +25,15 @@ namespace CIS_598_Project
     {
         private WaveIn recorder;
         private BufferedWaveProvider bufferedWaveProvider;
+        private IWaveProvider waveProvider;
+        private WaveProvider32 WaveProvider32;
+        private MixingSampleProvider mixingSampleProvider;
+        private ISampleProvider sampleProvider;
         private SavingWaveProvider savingWaveProvider;
+        private RawSourceWaveStream raw;
         private WaveOut player;
+        private double shift = 1.5;
+        
 
         public string PlaceholderText { get; set; }
 
@@ -38,6 +46,14 @@ namespace CIS_598_Project
         private void RecorderOnDataAvailable(object sender, WaveInEventArgs waveInEventArgs)
         {
             bufferedWaveProvider.AddSamples(waveInEventArgs.Buffer, 0, waveInEventArgs.BytesRecorded);
+            
+        }
+
+        private IWaveProvider PitchShift(BufferedWaveProvider bwp, double shift)
+        {
+            SmbPitchShiftingSampleProvider pitch = new SmbPitchShiftingSampleProvider(bwp.ToSampleProvider());
+            pitch.PitchFactor = (float)shift;
+            return pitch.ToWaveProvider();
         }
 
         private void uxPresetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -55,11 +71,17 @@ namespace CIS_598_Project
 
             // set up our signal chain
             bufferedWaveProvider = new BufferedWaveProvider(recorder.WaveFormat);
-            savingWaveProvider = new SavingWaveProvider(bufferedWaveProvider, "temp.wav");
+            //savingWaveProvider = new SavingWaveProvider(bufferedWaveProvider, "temp.wav");
+
+            SmbPitchShiftingSampleProvider pitch = new SmbPitchShiftingSampleProvider(bufferedWaveProvider.ToSampleProvider());
+            pitch.PitchFactor = (float)shift;
+
+
+            //waveProvider = PitchShift(bufferedWaveProvider, shift);
 
             // set up playback
             player = new WaveOut();
-            player.Init(savingWaveProvider);
+            player.Init(pitch.ToWaveProvider());//was savingWaveProvider
 
             // begin playback & record
             player.Play();
@@ -75,7 +97,7 @@ namespace CIS_598_Project
             // stop playback
             player.Stop();
             // finalize the WAV file
-            savingWaveProvider.Dispose();
+            //savingWaveProvider.Dispose();
         }
 
         private void uxFrequencySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
