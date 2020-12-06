@@ -1,4 +1,5 @@
 ﻿using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -24,7 +25,8 @@ namespace CIS_598_Project
     {
         private WaveIn recorder;
         private BufferedWaveProvider bufferedWaveProvider;
-        private SavingWaveProvider savingWaveProvider;
+        //private SavingWaveProvider savingWaveProvider;
+        private OffsetSampleProvider offsetSampleProvider;
         private WaveOut player;
 
         public string PlaceholderText { get; set; }
@@ -55,11 +57,11 @@ namespace CIS_598_Project
 
             // set up our signal chain
             bufferedWaveProvider = new BufferedWaveProvider(recorder.WaveFormat);
-            savingWaveProvider = new SavingWaveProvider(bufferedWaveProvider, "temp.wav");
+            //savingWaveProvider = new SavingWaveProvider(bufferedWaveProvider, "temp.wav");
 
             // set up playback
             player = new WaveOut();
-            player.Init(savingWaveProvider);
+            player.Init(bufferedWaveProvider);
 
             // begin playback & record
             player.Play();
@@ -75,7 +77,7 @@ namespace CIS_598_Project
             // stop playback
             player.Stop();
             // finalize the WAV file
-            savingWaveProvider.Dispose();
+            //savingWaveProvider.Dispose();
         }
 
         private void uxFrequencySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

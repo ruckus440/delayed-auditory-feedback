@@ -59,6 +59,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Audio\AudioPipeline.cs" />
+    <Compile Include="Audio\IAudioProcessor.cs" />
+    <Compile Include="Effects\Delay.cs" />
+    <Compile Include="Effects\Effect.cs" />
+    <Compile Include="Effects\EffectStream.cs" />
+    <Compile Include="Effects\Slider.cs" />
     <Compile Include="SavingWaveProvider.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -101,5 +107,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
