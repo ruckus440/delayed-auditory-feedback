@@ -24,14 +24,16 @@ namespace CIS_598_Project
     {
         private WaveIn recorder;
         private BufferedWaveProvider bufferedWaveProvider;
-        private SavingWaveProvider savingWaveProvider;
         private WaveOut player;
+        private int delayLength;
+        private bool running = false;
 
         public string PlaceholderText { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
+            recorder = new WaveIn();
             
         }
 
@@ -47,6 +49,7 @@ namespace CIS_598_Project
 
         private void uxPowerToggle_Checked(object sender, RoutedEventArgs e)
         {
+            running = true;
             uxPowerToggle.Content = "On";
 
             // set up the recorder
@@ -55,42 +58,59 @@ namespace CIS_598_Project
 
             // set up our signal chain
             bufferedWaveProvider = new BufferedWaveProvider(recorder.WaveFormat);
-            savingWaveProvider = new SavingWaveProvider(bufferedWaveProvider, "temp.wav");
-
+            
             // set up playback
             player = new WaveOut();
-            player.Init(savingWaveProvider);
+            player.Init(bufferedWaveProvider);
 
             // begin playback & record
-            player.Play();
-            recorder.StartRecording();
+            StartPlayback();
         }
 
         private void uxPowerToggle_Unchecked(object sender, RoutedEventArgs e)
         {
-            uxPowerToggle.Content = "Off";
-
-            // stop recording
-            recorder.StopRecording();
-            // stop playback
-            player.Stop();
-            // finalize the WAV file
-            savingWaveProvider.Dispose();
+            StopPlayback();
         }
 
         private void uxFrequencySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (running)
+            {
+                StopPlayback();
+            }
 
         }
 
         private void uxDelaySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (running)
+            {
+                StopPlayback();
+            }
+            delayLength = (int)uxDelaySlider.Value * 100;
 
         }
 
-        private void uxVolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
 
+        private async void StartPlayback()
+        {
+            recorder.StartRecording();
+            await Task.Delay(delayLength);
+            player.Play();
+        }
+
+        private void StopPlayback()
+        {
+            running = false;
+            uxPowerToggle.Content = "Off";
+            uxPowerToggle.IsChecked = false;
+
+            // stop recording
+            recorder.StopRecording();
+            // stop playback
+            player.Stop();
+            // dispose the recorder
+            recorder.Dispose();
         }
     }
 }
