@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CIS_598_Project"
         mc:Ignorable="d"
-        Title="DAF/AAF" Height="242" Width="706">
+        Title="DAF/AAF" Height="242" Width="715.333">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="53*"/>
@@ -40,12 +40,11 @@
             </ContentControl.ContentTemplate>
         </ContentControl>
         <ToggleButton x:Name="uxPowerToggle" Content="Off" Grid.Column="1" Margin="68,20,92,10" Checked="uxPowerToggle_Checked" Unchecked="uxPowerToggle_Unchecked"></ToggleButton>
-        <TextBlock Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Width="60">Frequency</TextBlock>
-        <Slider x:Name="uxFrequencySlider" Grid.Row="1" Grid.Column="1" Value="5" ValueChanged="uxFrequencySlider_ValueChanged"></Slider>
-        <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Width="60">Delay</TextBlock>
-        <Slider x:Name="uxDelaySlider" Grid.Row="2" Grid.Column="1" ValueChanged="uxDelaySlider_ValueChanged"></Slider>
-        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Width="60">Volume</TextBlock>
-        <Slider x:Name="uxVolumeSlider" Grid.Row="3" Grid.Column="1" Value="5" ValueChanged="uxVolumeSlider_ValueChanged"></Slider>
+        <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Width="60" Margin="0,0,65,0">Frequency</TextBlock>
+        <Slider x:Name="uxFrequencySlider" Grid.Row="2" Value="5" ValueChanged="uxFrequencySlider_ValueChanged" Grid.ColumnSpan="2" Margin="89,0,65,0"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Width="32" Margin="0,18,87,80" VerticalAlignment="Center">Delay</TextBlock>
+        <Slider x:Name="uxDelaySlider" Grid.Row="3" ValueChanged="uxDelaySlider_ValueChanged" Grid.ColumnSpan="2" Margin="72,10,82,69" TickPlacement="Both" IsSnapToTickEnabled="True" Value="-1"/>
+        <TextBox x:Name="uxDelayLabel" Text="{Binding ElementName=uxDelaySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="35" Margin="471,10,0,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="53" RenderTransformOrigin="0.05,0.638" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
     </Grid>
 
 </Window>
