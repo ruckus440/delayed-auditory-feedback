@@ -1,6 +1,7 @@
 ﻿using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,8 @@ namespace CIS_598_Project
         private WaveOut player;
         private int delayLength;
         private bool running = false;
+        Controller c = new Controller();
+        
 
         public string PlaceholderText { get; set; }
 
@@ -111,6 +114,27 @@ namespace CIS_598_Project
             player.Stop();
             // dispose the recorder
             recorder.Dispose();
+        }
+
+        private void uxManagePresetsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            PresetManager presetManager = new PresetManager();
+            presetManager.Show();
+        }
+
+        private void uxSaveCurrentSettingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            c.CloseMainWindow();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
