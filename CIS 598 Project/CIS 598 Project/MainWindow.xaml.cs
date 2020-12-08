@@ -34,32 +34,20 @@ namespace CIS_598_Project
         private int delayLength;
         private bool running = false;
         public BindingList<Preset> Presets { get; set; }
+        public int SelectedIndex { get; set; }
+
 
         static Controller c = new Controller();
-        
-        //public delegate void CallBack(BindingList<Preset> bl);
-        //public void GetPresetList(CallBack obj)
-        //{
 
-        //}
         public void Callback(BindingList<Preset> bl)
         {
-            
+
             Presets = bl;
         }
 
 
-        //public BindingList<Preset> Presets { get; set; }// = new BindingList<Preset> { new Preset("test1", 1, 3), new Preset("test2", 2, 4), new Preset("test3", 10, 6) };
         LoadMainWindow LoadMainWindow = c.LoadMainWindow;
         CloseMainWindow CloseMainWindow = c.CloseMainWindow;
-
-        
-        
-        
-        //BindingList<Preset> presets = new BindingList<Preset>();
-
-        
-        
 
         public string PlaceholderText { get; set; }
 
@@ -69,10 +57,7 @@ namespace CIS_598_Project
             recorder = new WaveIn();
             c.ReadSavedPresets();
             c.GetPresets(Callback);
-
             DataContext = this;
-            
-            
         }
 
         private void RecorderOnDataAvailable(object sender, WaveInEventArgs waveInEventArgs)
@@ -82,7 +67,14 @@ namespace CIS_598_Project
 
         private void uxPresetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+            if (running)
+            {
+                StopPlayback();
+            }
+            Preset p = new Preset();
+            p = (Preset)uxPresetComboBox.SelectedItem;
+            uxDelaySlider.Value = p.Delay;
+            uxFrequencySlider.Value = p.Frequency;
         }
 
         private void uxPowerToggle_Checked(object sender, RoutedEventArgs e)
@@ -96,7 +88,7 @@ namespace CIS_598_Project
 
             // set up our signal chain
             bufferedWaveProvider = new BufferedWaveProvider(recorder.WaveFormat);
-            
+
             // set up playback
             player = new WaveOut();
             player.Init(bufferedWaveProvider);
@@ -126,7 +118,6 @@ namespace CIS_598_Project
                 StopPlayback();
             }
             delayLength = (int)uxDelaySlider.Value * 100;
-
         }
 
 
