@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CIS_598_Project"
         mc:Ignorable="d"
-        Title="DAF/AAF" Height="242" Width="715.333"
+        Title="DAF/AAF" Height="242" Width="715"
         Closing="Window_Closing"
         Loaded="Window_Loaded">
     <Grid>
@@ -19,28 +19,19 @@
             <ColumnDefinition Width="157*"/>
             <ColumnDefinition Width="550*"/>
         </Grid.ColumnDefinitions>
-        <ContentControl Content="{Binding YourChoices}" Margin="10,14,5,0" Height="29" VerticalAlignment="Top" Grid.Column="0" Grid.Row="0">
-            <ContentControl.ContentTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <ComboBox x:Name="uxPresetComboBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="uxPresetComboBox_SelectionChanged" Text="Testing" Grid.Row="0" Grid.Column="0" Height="22">
-                            <ComboBoxItem>Zoom - 598</ComboBoxItem>
-                            <ComboBoxItem>Teams - Work</ComboBoxItem>
-                            <ComboBoxItem>Overwatch</ComboBoxItem>
-                            <ComboBoxItem>Preset 4</ComboBoxItem>
-                            <ComboBoxItem>Preset 5</ComboBoxItem>
-                        </ComboBox>
-                        <TextBlock x:Name="tb" Text="Select a preset" IsHitTestVisible="False" Visibility="Hidden" Padding="2px"/>
-                    </Grid>
+        <ComboBox x:Name="uxPresetComboBox" ItemsSource="{Binding Presets}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="uxPresetComboBox_SelectionChanged" Grid.Row="0" Grid.Column="0" Height="22">
+        </ComboBox>
+        <TextBlock x:Name="tb" Text="Select a preset" IsHitTestVisible="False" Visibility="Hidden" Padding="2px"/>
+        
 
-                    <DataTemplate.Triggers>
-                        <Trigger SourceName="uxPresetComboBox" Property="SelectedItem" Value="{x:Null}">
-                            <Setter TargetName="tb" Property="Visibility" Value="Visible"/>
-                        </Trigger>
-                    </DataTemplate.Triggers>
-                </DataTemplate>
-            </ContentControl.ContentTemplate>
-        </ContentControl>
+        
+        
+        
+        
+        
+        
+        
+        
         <ToggleButton x:Name="uxPowerToggle" Content="Off" Grid.Column="1" Margin="68,20,92,10" Checked="uxPowerToggle_Checked" Unchecked="uxPowerToggle_Unchecked"></ToggleButton>
         <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Width="60" Margin="0,0,73,0">Frequency</TextBlock>
         <Slider x:Name="uxFrequencySlider" Grid.Row="2" Value="5" ValueChanged="uxFrequencySlider_ValueChanged" Grid.ColumnSpan="2" Margin="89,0,65,0"/>

@@ -12,5 +12,22 @@ namespace CIS_598_Project
         public string Name { get; set; }
         public int Delay { get; set; }
         public int Frequency { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
+        //public Preset (string s, int d, int f)
+        //{
+        //    this.Name = s;
+        //    this.Delay = d;
+        //    this.Frequency = f;
+        //}
+
+        //public Preset()
+        //{
+
+        //}
     }
 }

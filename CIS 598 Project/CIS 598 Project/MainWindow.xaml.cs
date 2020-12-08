@@ -18,6 +18,11 @@ using System.Windows.Shapes;
 
 namespace CIS_598_Project
 {
+
+    public delegate void LoadMainWindow();
+    public delegate void CloseMainWindow();
+    public delegate void UpdatePresetList(BindingList<Preset> presets);
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -28,7 +33,32 @@ namespace CIS_598_Project
         private WaveOut player;
         private int delayLength;
         private bool running = false;
-        Controller c = new Controller();
+        public BindingList<Preset> Presets { get; set; }
+
+        static Controller c = new Controller();
+        
+        //public delegate void CallBack(BindingList<Preset> bl);
+        //public void GetPresetList(CallBack obj)
+        //{
+
+        //}
+        public void Callback(BindingList<Preset> bl)
+        {
+            
+            Presets = bl;
+        }
+
+
+        //public BindingList<Preset> Presets { get; set; }// = new BindingList<Preset> { new Preset("test1", 1, 3), new Preset("test2", 2, 4), new Preset("test3", 10, 6) };
+        LoadMainWindow LoadMainWindow = c.LoadMainWindow;
+        CloseMainWindow CloseMainWindow = c.CloseMainWindow;
+
+        
+        
+        
+        //BindingList<Preset> presets = new BindingList<Preset>();
+
+        
         
 
         public string PlaceholderText { get; set; }
@@ -37,6 +67,11 @@ namespace CIS_598_Project
         {
             InitializeComponent();
             recorder = new WaveIn();
+            c.ReadSavedPresets();
+            c.GetPresets(Callback);
+
+            DataContext = this;
+            
             
         }
 
@@ -124,17 +159,28 @@ namespace CIS_598_Project
 
         private void uxSaveCurrentSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            Preset newPreset = new Preset();
+            InputPresetName inputPresetName = new InputPresetName();
+            inputPresetName.ShowDialog();
+            if (inputPresetName.DialogResult == true)
+            {
+                c.AddPreset(inputPresetName.uxInputPresetName.Text, (int)uxDelaySlider.Value, (int)uxFrequencySlider.Value);
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            //CloseMainWindow();
             c.CloseMainWindow();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //LoadMainWindow();
+            //Presets = c.GetPresets();
 
         }
+
+
     }
 }

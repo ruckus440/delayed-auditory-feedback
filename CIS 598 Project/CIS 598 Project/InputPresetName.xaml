@@ -10,7 +10,7 @@
         <TextBlock>Save preset as:</TextBlock>
         <TextBox Name="uxInputPresetName"></TextBox>
         <Button x:Name="uxOkPreset" Content="Ok" Click="uxOkPreset_Click"/>
-        <Button x:Name="uxCancelPreset" Content="Cancel" Click="uxCancelPreset_Click"/>
+        <Button x:Name="uxCancelPreset" IsCancel="True" Content="Cancel"/> <!--="uxCancelPreset_Click"/>*-->
         <StackPanel Height="75"/>
 
 

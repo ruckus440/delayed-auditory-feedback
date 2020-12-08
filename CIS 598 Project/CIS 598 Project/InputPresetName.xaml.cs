@@ -29,9 +29,9 @@ namespace CIS_598_Project
             this.DialogResult = true;
         }
 
-        private void uxCancelPreset_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        //private void uxCancelPreset_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.DialogResult = false;
+        //}
     }
 }
