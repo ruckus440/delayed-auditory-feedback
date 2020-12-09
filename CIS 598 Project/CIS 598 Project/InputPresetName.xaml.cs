@@ -27,6 +27,7 @@ namespace CIS_598_Project
         private void uxOkPreset_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
+            
         }
     }
 }

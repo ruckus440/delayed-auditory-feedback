@@ -34,7 +34,6 @@ namespace CIS_598_Project
 
         public void Callback(BindingList<Preset> bl)
         {
-
             Presets = bl;
         }
 
@@ -61,17 +60,27 @@ namespace CIS_598_Project
                 Presets.Insert(index + 1, item);
                 uxPresetListBox.SelectedIndex = index + 1;
             }
-
         }
 
         private void uxDeletePreset_Click(object sender, RoutedEventArgs e)
-        {
-            
+        {            
             Presets.RemoveAt(uxPresetListBox.SelectedIndex);
         }
 
-        private void uxAddPresetBtn_Click(object sender, RoutedEventArgs e)
+        private void uxRenamePresetBtn_Click(object sender, RoutedEventArgs e)
         {
+            int index;
+            string ssstring;
+            InputPresetName inputPresetName = new InputPresetName();
+            index = uxPresetListBox.SelectedIndex;
+            inputPresetName.ShowDialog();
+
+            ssstring = inputPresetName.uxInputPresetName.Text;
+            Presets.ElementAt(index).Name = inputPresetName.uxInputPresetName.Text;
+            //Preset p = (Preset)uxPresetListBox.SelectedItem.ToString();
+            uxPresetListBox.Items.Refresh();
+            
+            
 
         }
     }

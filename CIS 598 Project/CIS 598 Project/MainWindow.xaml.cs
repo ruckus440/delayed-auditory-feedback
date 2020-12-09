@@ -47,7 +47,7 @@ namespace CIS_598_Project
 
 
         LoadMainWindow LoadMainWindow = c.LoadMainWindow;
-        CloseMainWindow CloseMainWindow = c.CloseMainWindow;
+        CloseMainWindow CloseMainWindow = c.SerializeSavedPresets;
 
         public string PlaceholderText { get; set; }
 
@@ -67,14 +67,27 @@ namespace CIS_598_Project
 
         private void uxPresetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (running)
+            try
             {
                 StopPlayback();
+
+                Preset p = new Preset();
+                p = (Preset)uxPresetComboBox.SelectedItem;
+                uxDelaySlider.Value = p.Delay;
+                uxFrequencySlider.Value = p.Frequency;
+                if (uxPresetComboBox.SelectedIndex != -1)
+                {
+                    uxSaveCurrentSettingsBtn.Content = "Update Current Settings";
+                }
+                else
+                {
+                    uxSaveCurrentSettingsBtn.Content = "Save Current Settings";
+                }
             }
-            Preset p = new Preset();
-            p = (Preset)uxPresetComboBox.SelectedItem;
-            uxDelaySlider.Value = p.Delay;
-            uxFrequencySlider.Value = p.Frequency;
+            catch (NullReferenceException)
+            {
+                uxPresetComboBox.SelectedIndex = -1;
+            }
         }
 
         private void uxPowerToggle_Checked(object sender, RoutedEventArgs e)
@@ -104,19 +117,17 @@ namespace CIS_598_Project
 
         private void uxFrequencySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (running)
-            {
-                StopPlayback();
-            }
+
+            StopPlayback();
+
 
         }
 
         private void uxDelaySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (running)
-            {
-                StopPlayback();
-            }
+
+            StopPlayback();
+
             delayLength = (int)uxDelaySlider.Value * 100;
         }
 
@@ -130,39 +141,54 @@ namespace CIS_598_Project
 
         private void StopPlayback()
         {
-            running = false;
-            uxPowerToggle.Content = "Off";
-            uxPowerToggle.IsChecked = false;
+            if (running)
+            {
+                running = false;
+                uxPowerToggle.Content = "Off";
+                uxPowerToggle.IsChecked = false;
 
-            // stop recording
-            recorder.StopRecording();
-            // stop playback
-            player.Stop();
-            // dispose the recorder
-            recorder.Dispose();
+                // stop recording
+                recorder.StopRecording();
+                // stop playback
+                player.Stop();
+                // dispose the recorder
+                recorder.Dispose();
+            }
         }
 
         private void uxManagePresetsBtn_Click(object sender, RoutedEventArgs e)
         {
+            uxSaveCurrentSettingsBtn.Content = "Save Current Settings";
+            StopPlayback();
+            uxPresetComboBox.SelectedIndex = -1;
             PresetManager presetManager = new PresetManager();
             presetManager.Show();
         }
 
         private void uxSaveCurrentSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
-            Preset newPreset = new Preset();
-            InputPresetName inputPresetName = new InputPresetName();
-            inputPresetName.ShowDialog();
-            if (inputPresetName.DialogResult == true)
+            
+            if (uxPresetComboBox.SelectedIndex != -1)
             {
-                c.AddPreset(inputPresetName.uxInputPresetName.Text, (int)uxDelaySlider.Value, (int)uxFrequencySlider.Value);
+                c.UpdatePresetSettings(uxPresetComboBox.SelectedIndex, (int)uxDelaySlider.Value, (int)uxFrequencySlider.Value);
+            }
+            else
+            {
+                Preset newPreset = new Preset();
+                InputPresetName inputPresetName = new InputPresetName();
+                inputPresetName.ShowDialog();
+                if (inputPresetName.DialogResult == true)
+                {
+                    c.AddPreset(inputPresetName.uxInputPresetName.Text, (int)uxDelaySlider.Value, (int)uxFrequencySlider.Value);
+                }
+                uxPresetComboBox.SelectedIndex = Presets.Count - 1;
             }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             //CloseMainWindow();
-            c.CloseMainWindow();
+            c.SerializeSavedPresets();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -172,6 +198,9 @@ namespace CIS_598_Project
 
         }
 
-
+        private void uxPresetComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            uxPresetComboBox.Items.Refresh();
+        }
     }
 }

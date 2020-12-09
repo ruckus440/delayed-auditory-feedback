@@ -19,7 +19,12 @@
             <ColumnDefinition Width="157*"/>
             <ColumnDefinition Width="550*"/>
         </Grid.ColumnDefinitions>
-        <ComboBox x:Name="uxPresetComboBox" ItemsSource="{Binding Presets}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="uxPresetComboBox_SelectionChanged" Grid.Row="0" Grid.Column="0" Height="22">
+        <ComboBox x:Name="uxPresetComboBox" ItemsSource="{Binding Presets}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="uxPresetComboBox_SelectionChanged" Grid.Row="0" Grid.Column="0" Height="22" Margin="10,20,0,0" DropDownOpened="uxPresetComboBox_DropDownOpened">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
         </ComboBox>
         <TextBlock x:Name="tb" Text="Select a preset" IsHitTestVisible="False" Visibility="Hidden" Padding="2px"/>
         
@@ -40,6 +45,7 @@
         <Button x:Name="uxManagePresetsBtn" Content="Manage Presets" Margin="10,10,31,0" Grid.Row="1" VerticalAlignment="Top" Height="20" Click="uxManagePresetsBtn_Click"/>
         <TextBox Text="Delay" HorizontalAlignment="Center" Height="35" Margin="1,5,90,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="66" RenderTransformOrigin="0.05,0.638" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         <Button x:Name="uxSaveCurrentSettingsBtn" Content="Save Current Settings" Grid.Column="1" HorizontalAlignment="Left" Margin="142,57,0,0" Grid.Row="3" VerticalAlignment="Top" Width="169" Click="uxSaveCurrentSettingsBtn_Click"/>
+        <DockPanel Grid.Column="1" HorizontalAlignment="Left" Height="100" LastChildFill="False" Margin="528,30,-78,0" Grid.RowSpan="4" VerticalAlignment="Top" Width="100"/>
     </Grid>
 
 </Window>
