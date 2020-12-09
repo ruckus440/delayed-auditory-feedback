@@ -1,6 +1,7 @@
 ﻿using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,11 @@ using System.Windows.Shapes;
 
 namespace CIS_598_Project
 {
+
+    public delegate void LoadMainWindow();
+    public delegate void CloseMainWindow();
+    public delegate void UpdatePresetList(BindingList<Preset> presets);
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -27,6 +33,21 @@ namespace CIS_598_Project
         private WaveOut player;
         private int delayLength;
         private bool running = false;
+        public BindingList<Preset> Presets { get; set; }
+        public int SelectedIndex { get; set; }
+
+
+        static Controller c = new Controller();
+
+        public void Callback(BindingList<Preset> bl)
+        {
+
+            Presets = bl;
+        }
+
+
+        LoadMainWindow LoadMainWindow = c.LoadMainWindow;
+        CloseMainWindow CloseMainWindow = c.SerializeSavedPresets;
 
         public string PlaceholderText { get; set; }
 
@@ -34,7 +55,9 @@ namespace CIS_598_Project
         {
             InitializeComponent();
             recorder = new WaveIn();
-            
+            c.ReadSavedPresets();
+            c.GetPresets(Callback);
+            DataContext = this;
         }
 
         private void RecorderOnDataAvailable(object sender, WaveInEventArgs waveInEventArgs)
@@ -44,7 +67,27 @@ namespace CIS_598_Project
 
         private void uxPresetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+            try
+            {
+                StopPlayback();
+
+                Preset p = new Preset();
+                p = (Preset)uxPresetComboBox.SelectedItem;
+                uxDelaySlider.Value = p.Delay;
+                uxFrequencySlider.Value = p.Frequency;
+                if (uxPresetComboBox.SelectedIndex != -1)
+                {
+                    uxSaveCurrentSettingsBtn.Content = "Update Current Settings";
+                }
+                else
+                {
+                    uxSaveCurrentSettingsBtn.Content = "Save Current Settings";
+                }
+            }
+            catch (NullReferenceException)
+            {
+                uxPresetComboBox.SelectedIndex = -1;
+            }
         }
 
         private void uxPowerToggle_Checked(object sender, RoutedEventArgs e)
@@ -58,7 +101,7 @@ namespace CIS_598_Project
 
             // set up our signal chain
             bufferedWaveProvider = new BufferedWaveProvider(recorder.WaveFormat);
-            
+
             // set up playback
             player = new WaveOut();
             player.Init(bufferedWaveProvider);
@@ -74,21 +117,18 @@ namespace CIS_598_Project
 
         private void uxFrequencySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (running)
-            {
-                StopPlayback();
-            }
+
+            StopPlayback();
+
 
         }
 
         private void uxDelaySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (running)
-            {
-                StopPlayback();
-            }
-            delayLength = (int)uxDelaySlider.Value * 100;
 
+            StopPlayback();
+
+            delayLength = (int)uxDelaySlider.Value * 100;
         }
 
 
@@ -101,16 +141,66 @@ namespace CIS_598_Project
 
         private void StopPlayback()
         {
-            running = false;
-            uxPowerToggle.Content = "Off";
-            uxPowerToggle.IsChecked = false;
+            if (running)
+            {
+                running = false;
+                uxPowerToggle.Content = "Off";
+                uxPowerToggle.IsChecked = false;
 
-            // stop recording
-            recorder.StopRecording();
-            // stop playback
-            player.Stop();
-            // dispose the recorder
-            recorder.Dispose();
+                // stop recording
+                recorder.StopRecording();
+                // stop playback
+                player.Stop();
+                // dispose the recorder
+                recorder.Dispose();
+            }
+        }
+
+        private void uxManagePresetsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            uxSaveCurrentSettingsBtn.Content = "Save Current Settings";
+            StopPlayback();
+            uxPresetComboBox.SelectedIndex = -1;
+            PresetManager presetManager = new PresetManager();
+            presetManager.Show();
+        }
+
+        private void uxSaveCurrentSettingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            
+            if (uxPresetComboBox.SelectedIndex != -1)
+            {
+                c.UpdatePresetSettings(uxPresetComboBox.SelectedIndex, (int)uxDelaySlider.Value, (int)uxFrequencySlider.Value);
+            }
+            else
+            {
+                Preset newPreset = new Preset();
+                InputPresetName inputPresetName = new InputPresetName();
+                inputPresetName.ShowDialog();
+                if (inputPresetName.DialogResult == true)
+                {
+                    c.AddPreset(inputPresetName.uxInputPresetName.Text, (int)uxDelaySlider.Value, (int)uxFrequencySlider.Value);
+                }
+                uxPresetComboBox.SelectedIndex = Presets.Count - 1;
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //CloseMainWindow();
+            c.SerializeSavedPresets();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //LoadMainWindow();
+            //Presets = c.GetPresets();
+
+        }
+
+        private void uxPresetComboBox_DropDownOpened(object sender, EventArgs e)
+        {
+            uxPresetComboBox.Items.Refresh();
         }
     }
 }
