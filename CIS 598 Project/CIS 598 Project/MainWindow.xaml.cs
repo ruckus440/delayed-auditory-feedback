@@ -1,20 +1,10 @@
 ﻿using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CIS_598_Project
 {
@@ -28,28 +18,21 @@ namespace CIS_598_Project
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static Controller c = new Controller();
         private WaveIn recorder;
         private BufferedWaveProvider bufferedWaveProvider;
         private WaveOut player;
         private int delayLength;
+        private double pitchShift = 1.0;
         private bool running = false;
+
         public BindingList<Preset> Presets { get; set; }
         public int SelectedIndex { get; set; }
 
-
-        static Controller c = new Controller();
-
         public void Callback(BindingList<Preset> bl)
         {
-
             Presets = bl;
         }
-
-
-        LoadMainWindow LoadMainWindow = c.LoadMainWindow;
-        CloseMainWindow CloseMainWindow = c.SerializeSavedPresets;
-
-        public string PlaceholderText { get; set; }
 
         public MainWindow()
         {
@@ -95,18 +78,20 @@ namespace CIS_598_Project
             running = true;
             uxPowerToggle.Content = "On";
 
-            // set up the recorder
             recorder = new WaveIn();
             recorder.DataAvailable += RecorderOnDataAvailable;
+            recorder.WaveFormat = new WaveFormat(88200, 1);
 
-            // set up our signal chain
             bufferedWaveProvider = new BufferedWaveProvider(recorder.WaveFormat);
 
-            // set up playback
-            player = new WaveOut();
-            player.Init(bufferedWaveProvider);
+            SmbPitchShiftingSampleProvider smbPitchShiftingProvider = new SmbPitchShiftingSampleProvider(bufferedWaveProvider.ToSampleProvider())
+            {
+                PitchFactor = (float)pitchShift
+            };
 
-            // begin playback & record
+            player = new WaveOut();
+            player.Init(smbPitchShiftingProvider);
+
             StartPlayback();
         }
 
@@ -117,20 +102,15 @@ namespace CIS_598_Project
 
         private void uxFrequencySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-
             StopPlayback();
-
-
+            pitchShift = 1.0 + (uxFrequencySlider.Value / 10);
         }
 
         private void uxDelaySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-
             StopPlayback();
-
             delayLength = (int)uxDelaySlider.Value * 100;
         }
-
 
         private async void StartPlayback()
         {
@@ -146,12 +126,8 @@ namespace CIS_598_Project
                 running = false;
                 uxPowerToggle.Content = "Off";
                 uxPowerToggle.IsChecked = false;
-
-                // stop recording
                 recorder.StopRecording();
-                // stop playback
                 player.Stop();
-                // dispose the recorder
                 recorder.Dispose();
             }
         }
@@ -167,7 +143,7 @@ namespace CIS_598_Project
 
         private void uxSaveCurrentSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
-            
+
             if (uxPresetComboBox.SelectedIndex != -1)
             {
                 c.UpdatePresetSettings(uxPresetComboBox.SelectedIndex, (int)uxDelaySlider.Value, (int)uxFrequencySlider.Value);
@@ -187,20 +163,18 @@ namespace CIS_598_Project
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            //CloseMainWindow();
             c.SerializeSavedPresets();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            //LoadMainWindow();
-            //Presets = c.GetPresets();
-
         }
 
         private void uxPresetComboBox_DropDownOpened(object sender, EventArgs e)
         {
             uxPresetComboBox.Items.Refresh();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
     }
 }

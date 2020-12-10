@@ -66,7 +66,6 @@
     <Compile Include="PresetManager.xaml.cs">
       <DependentUpon>PresetManager.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SavingWaveProvider.cs" />
     <Page Include="InputPresetName.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
