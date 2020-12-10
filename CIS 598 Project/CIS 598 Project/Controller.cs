@@ -34,7 +34,6 @@ namespace CIS_598_Project
             System.IO.FileStream file = System.IO.File.Create("SavedPresets.xml");
             writer.Serialize(file, Presets);
             file.Close();
-            //System.Windows.Forms.MessageBox.Show("Presets saved to: \n\n" + file.Name);
         }
 
         public void AddPreset(string s, int d, int f)

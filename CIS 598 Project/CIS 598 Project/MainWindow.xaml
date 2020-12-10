@@ -5,15 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CIS_598_Project"
         mc:Ignorable="d"
-        Title="DAF/AAF" Height="242" Width="715"
+        Title="DAF/AAF" Height="283.333" Width="715"
         Closing="Window_Closing"
-        Loaded="Window_Loaded">
-    <Grid>
+        Loaded="Window_Loaded" ResizeMode="NoResize">
+    <Grid Height="248" VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="53*"/>
             <RowDefinition Height="35*"/>
-            <RowDefinition Height="24*"/>
-            <RowDefinition Height="99*"/>
+            <RowDefinition Height="42*"/>
+            <RowDefinition Height="81*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="157*"/>
@@ -27,25 +27,25 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <TextBlock x:Name="tb" Text="Select a preset" IsHitTestVisible="False" Visibility="Hidden" Padding="2px"/>
-        
 
-        
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
+
+
         <ToggleButton x:Name="uxPowerToggle" Content="Off" Grid.Column="1" Margin="68,20,92,10" Checked="uxPowerToggle_Checked" Unchecked="uxPowerToggle_Unchecked"></ToggleButton>
-        <TextBlock Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" Padding="0,0,5,0" Width="60" Margin="0,0,73,0">Frequency</TextBlock>
-        <Slider x:Name="uxFrequencySlider" Grid.Row="2" Value="5" ValueChanged="uxFrequencySlider_ValueChanged" Grid.ColumnSpan="2" Margin="89,0,65,0"/>
-        <Slider x:Name="uxDelaySlider" Grid.Row="3" ValueChanged="uxDelaySlider_ValueChanged" Grid.ColumnSpan="2" Margin="72,5,82,59" TickPlacement="Both" IsSnapToTickEnabled="True" Value="-1"/>
-        <TextBox x:Name="uxDelayLabel" Text="{Binding ElementName=uxDelaySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="35" Margin="473,5,48,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.05,0.638" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Slider x:Name="uxFrequencySlider" Grid.Row="2" ValueChanged="uxFrequencySlider_ValueChanged" Grid.ColumnSpan="2" Margin="89,0,65,0" TickPlacement="Both" IsSnapToTickEnabled="True"/>
+        <TextBox x:Name="uxFrequencyLabel" Text="{Binding ElementName=uxFrequencySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="35" Margin="490,0,31,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.05,0.638" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Slider x:Name="uxDelaySlider" Grid.Row="3" ValueChanged="uxDelaySlider_ValueChanged" Grid.ColumnSpan="2" Margin="89,5,65,59" TickPlacement="Both" IsSnapToTickEnabled="True" Value="-1"/>
+        <TextBox x:Name="uxDelayLabel" Text="{Binding ElementName=uxDelaySlider, Path=Value, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Center" Height="35" Margin="490,5,31,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="29" RenderTransformOrigin="0.05,0.638" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         <Button x:Name="uxManagePresetsBtn" Content="Manage Presets" Margin="10,10,31,0" Grid.Row="1" VerticalAlignment="Top" Height="20" Click="uxManagePresetsBtn_Click"/>
-        <TextBox Text="Delay" HorizontalAlignment="Center" Height="35" Margin="1,5,90,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="66" RenderTransformOrigin="0.05,0.638" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-        <Button x:Name="uxSaveCurrentSettingsBtn" Content="Save Current Settings" Grid.Column="1" HorizontalAlignment="Left" Margin="142,57,0,0" Grid.Row="3" VerticalAlignment="Top" Width="169" Click="uxSaveCurrentSettingsBtn_Click"/>
-        <DockPanel Grid.Column="1" HorizontalAlignment="Left" Height="100" LastChildFill="False" Margin="528,30,-78,0" Grid.RowSpan="4" VerticalAlignment="Top" Width="100"/>
+        <TextBox Text="Delay" HorizontalAlignment="Center" Height="35" Margin="18,5,73,0" Grid.Row="3" TextWrapping="Wrap" VerticalAlignment="Top" Width="66" RenderTransformOrigin="0.05,0.638" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="0"/>
+        <Button x:Name="uxSaveCurrentSettingsBtn" Content="Save Current Settings" Grid.Column="1" HorizontalAlignment="Left" Margin="142,57,0,0" Grid.Row="3" VerticalAlignment="Top" Width="169" Click="uxSaveCurrentSettingsBtn_Click" Height="20"/>
+        <TextBox Text="Frequency" HorizontalAlignment="Center" Height="35" Margin="18,0,73,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="66" RenderTransformOrigin="0.05,0.638" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" BorderThickness="0"/>
     </Grid>
 
 </Window>
