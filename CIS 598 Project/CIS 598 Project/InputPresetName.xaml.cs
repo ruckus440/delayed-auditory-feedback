@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*
+ * InputPresetName.xaml.cs
+ * Author: Mike Ruckert
+ * CIS 598 Senior Project - Kansas State University
+ * 
+ * View form for entering the name of a preset for the DAF/AAF app.
+ */
+
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace CIS_598_Project
 {
@@ -24,10 +20,15 @@ namespace CIS_598_Project
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Event handler for clicking the uxOkPreset button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uxOkPreset_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
-            
+
         }
     }
 }

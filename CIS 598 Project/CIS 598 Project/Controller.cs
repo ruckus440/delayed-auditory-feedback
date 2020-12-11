@@ -1,33 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * Controller.cs
+ * Author: Mike Ruckert
+ * CIS 598 Senior Project - Kansas State University
+ * 
+ * Controller of the DAF/AAF app.
+ */
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CIS_598_Project
 {
     public class Controller
     {
+        /// <summary>
+        /// The list of Presets.
+        /// </summary>
         public static BindingList<Preset> Presets { get; set; } = new BindingList<Preset>();
 
+        /// <summary>
+        /// Delegate for passing the BindingList of Presets between the Controller and views.
+        /// </summary>
+        /// <param name="bl"></param>
         public delegate void Callback(BindingList<Preset> bl);
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         static Controller()
         {
-            
+
         }
 
+        /// <summary>
+        /// Gets the saved Preset list by using the Callback delegate.
+        /// </summary>
+        /// <param name="obj"></param>
         public void GetPresets(Callback obj)
         {
             obj(Presets);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bl"></param>
         public void SetPresets(BindingList<Preset> bl)
         {
             Presets = bl;
         }
 
+        /// <summary>
+        /// Serialize the saved list of Presets to a serialized xml file.
+        /// </summary>
         public void SerializeSavedPresets()
         {
             System.Xml.Serialization.XmlSerializer writer = new System.Xml.Serialization.XmlSerializer(typeof(BindingList<Preset>));
@@ -36,6 +59,12 @@ namespace CIS_598_Project
             file.Close();
         }
 
+        /// <summary>
+        /// Adds a Preset to the list using the selected name, delay and frequency.
+        /// </summary>
+        /// <param name="s">Name</param>
+        /// <param name="d">Delay</param>
+        /// <param name="f">Frequency</param>
         public void AddPreset(string s, int d, int f)
         {
             Preset newPreset = new Preset();
@@ -50,6 +79,9 @@ namespace CIS_598_Project
             ReadSavedPresets();
         }
 
+        /// <summary>
+        /// Reads the saved presets from the serialized list of Presets.
+        /// </summary>
         public void ReadSavedPresets()
         {
             try
@@ -65,6 +97,12 @@ namespace CIS_598_Project
             }
         }
 
+        /// <summary>
+        /// Updates the selected Preset.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <param name="d"></param>
+        /// <param name="f"></param>
         public void UpdatePresetSettings(int i, int d, int f)
         {
             Presets[i].Delay = d;

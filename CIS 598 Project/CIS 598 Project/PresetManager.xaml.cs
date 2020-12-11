@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * PresetManager.xaml.cs
+ * Author: Mike Ruckert
+ * CIS 598 Senior Project - Kansas State University
+ * 
+ * PresetManager view of the DAF/AAF app.
+ */
+
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace CIS_598_Project
 {
@@ -24,7 +21,9 @@ namespace CIS_598_Project
         public BindingList<Preset> Presets { get; set; }
         static Controller c = new Controller();
 
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public PresetManager()
         {
             InitializeComponent();
@@ -32,14 +31,22 @@ namespace CIS_598_Project
             DataContext = this;
         }
 
+        /// <summary>
+        /// Callback function for passing the list of Preset via delegate.
+        /// </summary>
+        /// <param name="bl"></param>
         public void Callback(BindingList<Preset> bl)
         {
             Presets = bl;
         }
 
-
+        /// <summary>
+        /// Event handler for clicking uxMoveUpBtn
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uxMoveUpBtn_Click(object sender, RoutedEventArgs e)
-        {   
+        {
             int index = uxPresetListBox.SelectedIndex;
             if (index > 0)
             {
@@ -50,6 +57,11 @@ namespace CIS_598_Project
             }
         }
 
+        /// <summary>
+        /// Event handler for clicking uxMoveDownBtn
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uxMoveDownBtn_Click(object sender, RoutedEventArgs e)
         {
             int index = uxPresetListBox.SelectedIndex;
@@ -62,11 +74,21 @@ namespace CIS_598_Project
             }
         }
 
+        /// <summary>
+        /// Event handler for clicking uxDeletePreset
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uxDeletePreset_Click(object sender, RoutedEventArgs e)
-        {            
+        {
             Presets.RemoveAt(uxPresetListBox.SelectedIndex);
         }
 
+        /// <summary>
+        /// Event handler for clicking uxRenamePresetBtn
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uxRenamePresetBtn_Click(object sender, RoutedEventArgs e)
         {
             int index;
@@ -76,11 +98,11 @@ namespace CIS_598_Project
             inputPresetName.ShowDialog();
 
             ssstring = inputPresetName.uxInputPresetName.Text;
+
             Presets.ElementAt(index).Name = inputPresetName.uxInputPresetName.Text;
-            //Preset p = (Preset)uxPresetListBox.SelectedItem.ToString();
             uxPresetListBox.Items.Refresh();
-            
-            
+
+
 
         }
     }

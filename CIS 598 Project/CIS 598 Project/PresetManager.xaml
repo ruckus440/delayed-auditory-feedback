@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CIS_598_Project"
         mc:Ignorable="d"
-        Title="PresetManager" Height="355.682" Width="343.136">
+        Title="PresetManager" Height="355.682" Width="343.136" WindowStartupLocation="CenterOwner">
     <Grid HorizontalAlignment="Right" Width="316" Margin="0,0,2,0" Height="319" VerticalAlignment="Top">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

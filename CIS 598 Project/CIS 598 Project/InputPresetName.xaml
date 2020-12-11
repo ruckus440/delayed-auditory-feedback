@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CIS_598_Project"
         mc:Ignorable="d"
-        Title="InputPresetName" Height="119.318" Width="226.136">
+        Title="InputPresetName" Height="119.318" Width="226.136" WindowStartupLocation="CenterOwner">
     <StackPanel>
         <TextBlock>Save preset as:</TextBlock>
         <TextBox Name="uxInputPresetName"></TextBox>
-        <Button x:Name="uxOkPreset" Content="Ok" Click="uxOkPreset_Click" Margin="10,0,50,0"/>
-        <Button x:Name="uxCancelPreset" IsCancel="True" Content="Cancel" Margin="10,0,50,0"/>
+        <Button x:Name="uxOkPreset" Content="Ok" Click="uxOkPreset_Click" Margin="50,7,50,0"/>
+        <Button x:Name="uxCancelPreset" IsCancel="True" Content="Cancel" Margin="50,0"/>
         <!--="uxCancelPreset_Click"/>*-->
 
 

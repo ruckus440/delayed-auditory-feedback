@@ -1,4 +1,12 @@
-﻿using NAudio.Wave;
+﻿/*
+ * MainWindow.xaml.cs
+ * Author: Mike Ruckert
+ * CIS 598 Senior Project - Kansas State University
+ * 
+ * Main view form for the DAF/AAF app.
+ */
+
+using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System;
 using System.ComponentModel;
@@ -25,15 +33,12 @@ namespace CIS_598_Project
         private int delayLength;
         private double pitchShift = 1.0;
         private bool running = false;
-
         public BindingList<Preset> Presets { get; set; }
         public int SelectedIndex { get; set; }
 
-        public void Callback(BindingList<Preset> bl)
-        {
-            Presets = bl;
-        }
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
@@ -43,17 +48,37 @@ namespace CIS_598_Project
             DataContext = this;
         }
 
+
+        /// <summary>
+        /// Callback method for delegate from Controller to send the list of Presets.
+        /// </summary>
+        /// <param name="bl">The list of Presets</param>
+        public void Callback(BindingList<Preset> bl)
+        {
+            Presets = bl;
+        }
+
+
+        /// <summary>
+        /// Event handler to add audio samples to the BufferedWaveProvider buffer when samples are available.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="waveInEventArgs"></param>
         private void RecorderOnDataAvailable(object sender, WaveInEventArgs waveInEventArgs)
         {
             bufferedWaveProvider.AddSamples(waveInEventArgs.Buffer, 0, waveInEventArgs.BytesRecorded);
         }
 
+        /// <summary>
+        /// Event handler that triggers when the uxPresetCombo selection is changed. Catches the exception in the event a Preset is deleted.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uxPresetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
                 StopPlayback();
-
                 Preset p = new Preset();
                 p = (Preset)uxPresetComboBox.SelectedItem;
                 uxDelaySlider.Value = p.Delay;
@@ -73,6 +98,11 @@ namespace CIS_598_Project
             }
         }
 
+        /// <summary>
+        /// Event handler for when the uxPowerToggle is checked.
+        /// </summary>
+        /// <param name="sender">uxPowerToggle</param>
+        /// <param name="e"></param>
         private void uxPowerToggle_Checked(object sender, RoutedEventArgs e)
         {
             running = true;
@@ -95,23 +125,41 @@ namespace CIS_598_Project
             StartPlayback();
         }
 
+        /// <summary>
+        /// Event handler for when the uxPowerToggle is unchecked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uxPowerToggle_Unchecked(object sender, RoutedEventArgs e)
         {
             StopPlayback();
         }
 
+        /// <summary>
+        /// Event handler for when the value of uxFrequencySlider is changed.
+        /// </summary>
+        /// <param name="sender">uxFrequencySlider</param>
+        /// <param name="e"></param>
         private void uxFrequencySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             StopPlayback();
             pitchShift = 1.0 + (uxFrequencySlider.Value / 10);
         }
 
+        /// <summary>
+        /// Event handler for when the value of uxDelaySlider is changed.
+        /// </summary>
+        /// <param name="sender">uxDelaySlider</param>
+        /// <param name="e"></param>
         private void uxDelaySlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             StopPlayback();
             delayLength = (int)uxDelaySlider.Value * 100;
         }
 
+        /// <summary>
+        /// Starts audio recording and playback. Uses the Delay function to delay the playback from the start of recording depending on delayLength.
+        /// </summary>
         private async void StartPlayback()
         {
             recorder.StartRecording();
@@ -119,6 +167,9 @@ namespace CIS_598_Project
             player.Play();
         }
 
+        /// <summary>
+        /// If running, stops the playback, resets the uxPowerToggle, and dispose of the recorder.
+        /// </summary>
         private void StopPlayback()
         {
             if (running)
@@ -132,6 +183,11 @@ namespace CIS_598_Project
             }
         }
 
+        /// <summary>
+        /// Event handler for clicking uxManagePresetsBtn
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uxManagePresetsBtn_Click(object sender, RoutedEventArgs e)
         {
             uxSaveCurrentSettingsBtn.Content = "Save Current Settings";
@@ -141,6 +197,11 @@ namespace CIS_598_Project
             presetManager.Show();
         }
 
+        /// <summary>
+        /// Event handler for clicking uxSaveCurrentSettingsBtn.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uxSaveCurrentSettingsBtn_Click(object sender, RoutedEventArgs e)
         {
 
@@ -161,16 +222,31 @@ namespace CIS_598_Project
             }
         }
 
+        /// <summary>
+        /// Event handler for closing MainWindow. Calls the Controllers SerializeSavedPresets method to save the list of Presets to file.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             c.SerializeSavedPresets();
         }
 
+        /// <summary>
+        /// Event handler for opening the PresetComboBox drop down
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void uxPresetComboBox_DropDownOpened(object sender, EventArgs e)
         {
             uxPresetComboBox.Items.Refresh();
         }
 
+        /// <summary>
+        /// Event handler for loading the main window.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
